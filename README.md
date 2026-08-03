@@ -426,21 +426,6 @@ Business Analytics
 
 ---
 
-# 📸 Screenshots
-
-Add screenshots of:
-
-- Workflow 1
-- Workflow 2
-- Workflow 3
-- Workflow 4
-- Workflow 5
-- Workflow 6
-- Architecture Diagram
-- Database Relationship Diagram
-
----
-
 # 🔮 Future Enhancements
 
 - Stripe Integration
@@ -457,7 +442,7 @@ Add screenshots of:
 
 # 👨‍💻 Author
 
-**Ashish Boudh**
+**Ashish Kumar**
 
 B.Tech Computer Science (AI & ML)
 
@@ -471,7 +456,7 @@ Summer Internship Project – IIT Jammu
 
 This project is developed for educational and learning purposes.
 
-© 2026 Ashish Boudh. All Rights Reserved.
+© 2026 Ashish Kumar. All Rights Reserved.
 
 ---
 
