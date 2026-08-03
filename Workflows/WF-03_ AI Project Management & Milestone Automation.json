@@ -1,0 +1,1330 @@
+{
+  "name": "WF-03: AI Project Management & Milestone Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw",
+          "mode": "list",
+          "cachedResultName": "FreelanceFlow AI Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 264131724,
+          "mode": "list",
+          "cachedResultName": "Proposals",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit#gid=264131724"
+        },
+        "event": "rowUpdate",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "70937260-2f73-4987-88d6-1cf0f4cc81c9",
+      "name": "Accepted Proposal Trigger",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "UxY64eGz1qOORPNR",
+          "name": "Google Sheets Trigger account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b00cdfa2-1b90-418f-b18d-e4d01b1bcef0",
+              "leftValue": "={{ $json.Status }}",
+              "rightValue": "Accepted",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "f5c38057-bef3-4810-917d-85e829213275",
+              "leftValue": "={{ $json.Project_ID }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        208,
+        0
+      ],
+      "id": "fd941190-1e97-4921-9ab0-977b66d4a70d",
+      "name": "Is Proposal Accepted?"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw",
+          "mode": "list",
+          "cachedResultName": "FreelanceFlow AI Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Lead_ID",
+              "lookupValue": "={{ $('Accepted Proposal Trigger').item.json.Lead_ID }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        416,
+        0
+      ],
+      "id": "0a709f89-9b6b-475a-b989-dbc01856eae8",
+      "name": "Load Lead Details",
+      "alwaysOutputData": false,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "u0mlelQ7KVoh0pJf",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const projectId =\n\"PRJ-\" +\nnew Date().getFullYear() +\n\"-\" +\nMath.floor(Math.random()*100000);\n\nreturn [{\njson:{\n...$json,\nProject_ID:projectId\n}\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        624,
+        0
+      ],
+      "id": "0f54cdf1-ea62-4545-9ea1-675011e2363e",
+      "name": "Generate Project ID"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Client\n\n{{$json.Client_Name}}\n\nCompany\n\n{{$json.Company}}\n\nProject\n\n{{$json.Project_Title}}\n\nDescription\n\n{{$json.Project_Description}}\n\nBudget\n\n{{$json.Budget}}\n\nDeadline\n\n{{$json.Deadline}}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=You are a Senior Technical Project Manager working in an AI Automation Company.\n\nCreate a complete project execution plan.\n\nReturn ONLY valid JSON.\n\nSchema:\n\n{\n\"project_duration\":\"\",\n\"estimated_completion\":\"\",\n\"risk_level\":\"\",\n\"meeting_agenda\":\"\",\n\"milestones\":[\n{\n\"name\":\"\",\n\"duration\":\"\",\n\"deliverables\":\"\",\n\"tasks\":[\n{\n\"task\":\"\",\n\"description\":\"\",\n\"priority\":\"\",\n\"estimated_hours\":\"\"\n}\n]\n}\n]\n}\n\nRules:\n\nReturn JSON only.\n\nNo markdown.\n\nGenerate exactly 4 milestones.\n\nEach milestone must contain exactly 4 tasks.\n\nPriorities:\n\nHigh\n\nMedium\n\nLow"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        832,
+        0
+      ],
+      "id": "d43f8876-c07e-426c-8f3e-fcca387f286f",
+      "name": "AI Project Planner"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        768,
+        208
+      ],
+      "id": "f7d41e7a-339b-4f33-925b-0ab2802fa176",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "O42teEPhzeiFw9s1",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "let text =\n$json.text ||\n$json.output ||\n\"\";\n\ntext=text\n.replace(/```json/g,\"\")\n.replace(/```/g,\"\")\n.trim();\n\nconst ai=JSON.parse(text);\n\nreturn [{\njson:{\n...$('Generate Project ID').item.json,\n...ai\n}\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1184,
+        0
+      ],
+      "id": "7dbfeb92-09ce-4828-ac8b-8f31ce0002d7",
+      "name": "Parse Project Plan"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw",
+          "mode": "list",
+          "cachedResultName": "FreelanceFlow AI Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1890765584,
+          "mode": "list",
+          "cachedResultName": "Projects",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit#gid=1890765584"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Project_ID": "={{ $json.Project_ID }}",
+            "Proposal_ID": "={{ $('Is Proposal Accepted?').item.json.Proposal_ID }}",
+            "Lead_ID": "={{$json.Lead_ID}}",
+            "Client_Name": "={{ $json.Client_Name }}",
+            "Company": "={{ $json.Company }}",
+            "Client_Email": "={{ $json.Client_Email }}",
+            "Project_Title": "={{ $json.Project_Title }}",
+            "Description": "={{ $json.Project_Description }}",
+            "Budget": "={{ $json.Budget }}",
+            "Estimated_Hours": "={{ $json.Estimated_Hours }}",
+            "Start_Date": "={{$today}}",
+            "End_Date": "={{$json.estimated_completion}}",
+            "Project_Status": "Planning",
+            "Progress": "0",
+            "Current_Milestone": "Planning",
+            "Created_At": "={{$now}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Project_ID",
+              "displayName": "Project_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Proposal_ID",
+              "displayName": "Proposal_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Lead_ID",
+              "displayName": "Lead_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Client_Name",
+              "displayName": "Client_Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Client_Email",
+              "displayName": "Client_Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Project_Title",
+              "displayName": "Project_Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Description",
+              "displayName": "Description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Budget",
+              "displayName": "Budget",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Estimated_Hours",
+              "displayName": "Estimated_Hours",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Start_Date",
+              "displayName": "Start_Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "End_Date",
+              "displayName": "End_Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Project_Status",
+              "displayName": "Project_Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Progress",
+              "displayName": "Progress",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Current_Milestone",
+              "displayName": "Current_Milestone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Created_At",
+              "displayName": "Created_At",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1392,
+        0
+      ],
+      "id": "6ae9ad0f-d53c-4185-ac12-463429c414d5",
+      "name": "Create Project",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "u0mlelQ7KVoh0pJf",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const milestones = $('Parse Project Plan').first().json.milestones;\nreturn milestones.map(m => ({\n  json: {\n    ...$('Create Project').first().json,\n    milestone_name: m.name,\n    milestone_duration: m.duration,\n    milestone_deliverables: m.deliverables,\n    tasks: m.tasks\n  }\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1600,
+        0
+      ],
+      "id": "82c9fa8b-5fab-4986-966e-254712a6c050",
+      "name": "Split Milestones"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1808,
+        0
+      ],
+      "id": "cd87d020-4a4b-476c-b0aa-02e511d6932f",
+      "name": "Process Milestones"
+    },
+    {
+      "parameters": {
+        "jsCode": "const tasks = $('Split Milestones').first().json.tasks;\n\nreturn tasks.map(task => ({\n  json: {\n    ...$('Create Project').first().json,\n    Milestone: $('Split Milestones').first().json.milestone_name,\n    Task_Name: task.task,\n    Description: task.description,\n    Priority: task.priority,\n    Estimated_Hours: task.estimated_hours\n  }\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2048,
+        192
+      ],
+      "id": "d78f58db-a310-47bc-a40d-ae3ad6ff10d6",
+      "name": "Split Tasks"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw",
+          "mode": "list",
+          "cachedResultName": "FreelanceFlow AI Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1170245692,
+          "mode": "list",
+          "cachedResultName": "Tasks",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit#gid=1170245692"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Task_ID": "={{\"TSK-\"+Date.now()+\"-\"+Math.floor(Math.random()*1000)}}",
+            "Project_ID": "={{ $json.Project_ID }}",
+            "Milestone": "={{ $json.Milestone }}",
+            "Task_Name": "={{ $json.Task_Name }}",
+            "Description": "={{ $json.Description }}",
+            "Priority": "={{ $json.Priority }}",
+            "Estimated_Hours": "={{ $json.Estimated_Hours }}",
+            "Deadline": "\"\"",
+            "Status": "Pending",
+            "Created_At": "={{$now}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Task_ID",
+              "displayName": "Task_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Project_ID",
+              "displayName": "Project_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Milestone",
+              "displayName": "Milestone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Task_Name",
+              "displayName": "Task_Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Description",
+              "displayName": "Description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Priority",
+              "displayName": "Priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Estimated_Hours",
+              "displayName": "Estimated_Hours",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Deadline",
+              "displayName": "Deadline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Created_At",
+              "displayName": "Created_At",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2224,
+        192
+      ],
+      "id": "29e05ec0-21ae-471f-aa39-aa697cf28a6d",
+      "name": "Create Tasks",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "u0mlelQ7KVoh0pJf",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2048,
+        -64
+      ],
+      "id": "a036351b-6c34-46f5-bf2b-cfdbdb8497b1",
+      "name": "Milestones Completed"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw",
+          "mode": "list",
+          "cachedResultName": "FreelanceFlow AI Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1692952131,
+          "mode": "list",
+          "cachedResultName": "Meetings",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit#gid=1692952131"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Meeting_ID": "={{\"MTG-\"+Date.now()}}",
+            "Project_ID": "={{ $('Create Project').item.json.Project_ID }}",
+            "Client_Name": "={{ $('Create Project').item.json.Client_Name }}",
+            "Email": "={{ $('Create Project').item.json.Client_Email }}",
+            "Title": "=Project Kickoff Meeting",
+            "Date": "={{$today.plus({days:1})}}",
+            "Time": "10:00 AM",
+            "Meet_Link": "To Be Generated",
+            "Status": "Scheduled"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Meeting_ID",
+              "displayName": "Meeting_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Project_ID",
+              "displayName": "Project_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Client_Name",
+              "displayName": "Client_Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Title",
+              "displayName": "Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Meet_Link",
+              "displayName": "Meet_Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2464,
+        -64
+      ],
+      "id": "efa8ed4b-893e-4e12-b06b-d1956189fc97",
+      "name": "Create Kickoff Meeting",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "u0mlelQ7KVoh0pJf",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{$('Create Project').first().json.Client_Email}}",
+        "subject": "=Project Kickoff - {{$('Create Project').first().json.Project_Title}}",
+        "message": "=Hello {{$('Create Project').first().json.Client_Name}},\n\nThank you for accepting our proposal.\n\nYour project has now been initiated.\n\n<b>Project ID:</b>\n{{$('Create Project').first().json.Project_ID}}\n\nOur AI Project Manager has generated your complete execution roadmap.\n\nA kickoff meeting has been scheduled.\n\nWe look forward to working with you.\n\nRegards,\n\nAshish Boudh\n\nFounder, Orithm AI",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        2672,
+        -64
+      ],
+      "id": "b704b15b-09ee-490a-ad89-f92bf92139a4",
+      "name": "Notify Client",
+      "webhookId": "f2a86d02-9493-4298-b506-a3c2bff78c01",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "fibXsVbQJ6j6GE1R",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw",
+          "mode": "list",
+          "cachedResultName": "FreelanceFlow AI Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 264131724,
+          "mode": "list",
+          "cachedResultName": "Proposals",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit#gid=264131724"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Status": "Accepted",
+            "Project_ID": "={{$('Create Project').first().json.Project_ID}}",
+            "Accepted_At": "={{$now}}",
+            "Proposal_ID": "={{ $('Create Project').item.json.Proposal_ID }}"
+          },
+          "matchingColumns": [
+            "Proposal_ID"
+          ],
+          "schema": [
+            {
+              "id": "Proposal_ID",
+              "displayName": "Proposal_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Lead_ID",
+              "displayName": "Lead_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Project_ID",
+              "displayName": "Project_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Client_Name",
+              "displayName": "Client_Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Proposal_Title",
+              "displayName": "Proposal_Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Executive_Summary",
+              "displayName": "Executive_Summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Understanding",
+              "displayName": "Understanding",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Solution",
+              "displayName": "Solution",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Deliverables",
+              "displayName": "Deliverables",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Timeline",
+              "displayName": "Timeline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Pricing",
+              "displayName": "Pricing",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Why_Choose_Us",
+              "displayName": "Why_Choose_Us",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Next_Steps",
+              "displayName": "Next_Steps",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Created_At",
+              "displayName": "Created_At",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Accepted_At",
+              "displayName": "Accepted_At",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Kickoff_Date",
+              "displayName": "Kickoff_Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2880,
+        -64
+      ],
+      "id": "bd151da0-60f5-4e01-a67c-24ebc6a50d91",
+      "name": "Update Proposal",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "u0mlelQ7KVoh0pJf",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw",
+          "mode": "list",
+          "cachedResultName": "FreelanceFlow AI Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2102602887,
+          "mode": "list",
+          "cachedResultName": "Audit_Log",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit#gid=2102602887"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{$now}}",
+            "Workflow": "WF-03 AI Project Management & Milestone Automation",
+            "Action": "Project Created",
+            "Project_ID": "={{$('Create Project').first().json.Project_ID}}",
+            "Lead_ID": "={{$('Create Project').first().json.Lead_ID}}",
+            "Client": "={{ $('Create Project').item.json.Client_Name }}",
+            "Status": "Success",
+            "Message": "Project, milestones, tasks and kickoff meeting created automatically."
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Workflow",
+              "displayName": "Workflow",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Action",
+              "displayName": "Action",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Project_ID",
+              "displayName": "Project_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Lead_ID",
+              "displayName": "Lead_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Client",
+              "displayName": "Client",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3088,
+        -64
+      ],
+      "id": "c6bbd949-f22c-4200-95b1-5ffe4f7d224b",
+      "name": "Audit_Log",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "u0mlelQ7KVoh0pJf",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        2256,
+        -64
+      ],
+      "id": "94f082f2-b97b-4e4f-981f-817730cc6742",
+      "name": "Limit"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Accepted Proposal Trigger": {
+      "main": [
+        [
+          {
+            "node": "Is Proposal Accepted?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Proposal Accepted?": {
+      "main": [
+        [
+          {
+            "node": "Load Lead Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load Lead Details": {
+      "main": [
+        [
+          {
+            "node": "Generate Project ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Project ID": {
+      "main": [
+        [
+          {
+            "node": "AI Project Planner",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Project Planner",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Project Planner": {
+      "main": [
+        [
+          {
+            "node": "Parse Project Plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Project Plan": {
+      "main": [
+        [
+          {
+            "node": "Create Project",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Project": {
+      "main": [
+        [
+          {
+            "node": "Split Milestones",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Milestones": {
+      "main": [
+        [
+          {
+            "node": "Process Milestones",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Milestones": {
+      "main": [
+        [
+          {
+            "node": "Milestones Completed",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Split Tasks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Tasks": {
+      "main": [
+        [
+          {
+            "node": "Create Tasks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Tasks": {
+      "main": [
+        [
+          {
+            "node": "Process Milestones",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Milestones Completed": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Kickoff Meeting": {
+      "main": [
+        [
+          {
+            "node": "Notify Client",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notify Client": {
+      "main": [
+        [
+          {
+            "node": "Update Proposal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Proposal": {
+      "main": [
+        [
+          {
+            "node": "Audit_Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Create Kickoff Meeting",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "623f2237-c275-4d6c-9600-87572f375ad7",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "85f10678ae749c60f4d3e472e77ca5e4892c573fb0d3adbb2b883464be53d319"
+  },
+  "nodeGroups": [],
+  "id": "UoU035PsiADqYMNv",
+  "tags": []
+}

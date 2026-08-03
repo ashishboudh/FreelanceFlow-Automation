@@ -1,0 +1,1935 @@
+{
+  "name": "WF-01 | Lead Discovery Engine",
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b6d5a13a-acf4-4ca3-8eb6-170e3e77bbac",
+              "name": "lead_id",
+              "value": "={{ 'LD-' + Date.now() }}",
+              "type": "string"
+            },
+            {
+              "id": "6c6dc675-bfbd-4777-9187-25b9988b0d94",
+              "name": "client_name",
+              "value": "={{ $json['Client Name'] }}",
+              "type": "string"
+            },
+            {
+              "id": "1880e72c-baaa-454c-b46b-0c974a438241",
+              "name": "company",
+              "value": "={{ $json[\"Company Name\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "6de3c973-bd97-418b-a376-a8869651664a",
+              "name": "email",
+              "value": "={{ $json['Email Address'] }}",
+              "type": "string"
+            },
+            {
+              "id": "e379695d-05c2-482d-82b3-f8a6d4b62fc8",
+              "name": "phone",
+              "value": "={{ $json[\"Phone Number\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "7a8a0fe7-54d2-4ce7-8931-2c91eb7b4489",
+              "name": "country",
+              "value": "={{ $json[\"Country\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "4fb11726-7caa-4c43-a787-ffb1b19be2b1",
+              "name": "project_title",
+              "value": "={{ $json[\"Project Title\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "bf16b777-9d66-48f3-a86d-6aa60e35fd80",
+              "name": "project_description",
+              "value": "={{ $json[\"Project Description\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "b0233e00-447a-4c89-a97a-b4f5983da3b0",
+              "name": "project_category",
+              "value": "={{ $json[\"Project Category\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "abe93c0d-0ec5-479f-bb18-c22177d8478c",
+              "name": "budget",
+              "value": "={{ Number($json[\"Estimated Budget (USD)\"]) }}",
+              "type": "string"
+            },
+            {
+              "id": "6a0c7938-33d7-4fe7-a36c-679d5fd4de2f",
+              "name": "deadline",
+              "value": "={{ $json[\"Expected Deadline\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "d6d0f0ff-58db-45d8-be87-78bfd5f34639",
+              "name": "preferred_communication",
+              "value": "={{ $json[\"Preferred Communication\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "a4e4b3bf-5197-48dd-8572-cb6296a7f503",
+              "name": "additional_notes",
+              "value": "={{ $json[\"Additional Notes\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "f1544f79-1914-4006-976c-a1e06e29538c",
+              "name": "source",
+              "value": "Google Form",
+              "type": "string"
+            },
+            {
+              "id": "a2f0437d-c722-4bd4-b056-143ac5986dbe",
+              "name": "lead_status",
+              "value": "New",
+              "type": "string"
+            },
+            {
+              "id": "68018acf-f898-46b7-b780-e5b3ff0d0269",
+              "name": "proposal_status",
+              "value": "Pending",
+              "type": "string"
+            },
+            {
+              "id": "87cb6b90-dce6-4876-aa3f-b9cf441b1bba",
+              "name": "ai_score",
+              "value": 0,
+              "type": "number"
+            },
+            {
+              "id": "1955efce-e799-4d33-a572-11856b88e0e1",
+              "name": "priority",
+              "value": "Pending",
+              "type": "string"
+            },
+            {
+              "id": "fc1f3447-8cd5-4fa0-bd60-485f4b4e4b02",
+              "name": "created_at",
+              "value": "={{ $now }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        624,
+        0
+      ],
+      "id": "ccec561e-1294-4de5-a368-dbdf9aa4642e",
+      "name": "Normalize Lead Data"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw",
+          "mode": "list",
+          "cachedResultName": "FreelanceFlow AI Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        832,
+        0
+      ],
+      "id": "577f9009-7cb4-459e-aca7-dc771a36df9d",
+      "name": "Load Existing Leads",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "u0mlelQ7KVoh0pJf",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1eRNVQSJV5oz82D2CFpqEeHD3cjOaQ8MTuaLbjL3_uT4",
+          "mode": "list",
+          "cachedResultName": "Lead Intake Responses",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1eRNVQSJV5oz82D2CFpqEeHD3cjOaQ8MTuaLbjL3_uT4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2003652545,
+          "mode": "list",
+          "cachedResultName": "Form Responses 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1eRNVQSJV5oz82D2CFpqEeHD3cjOaQ8MTuaLbjL3_uT4/edit#gid=2003652545"
+        },
+        "event": "rowAdded",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        432,
+        0
+      ],
+      "id": "af84e86d-3375-49db-b2cb-e04c5868afa4",
+      "name": "New Client Inquiry",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "UxY64eGz1qOORPNR",
+          "name": "Google Sheets Trigger account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Evaluate this freelance project inquiry.\n\nClient Name: {{$json.client_name}}\nCompany: {{$json.company}}\nCountry: {{$json.country}}\n\nProject Title: {{$json.project_title}}\nProject Category: {{$json.project_category}}\n\nDescription:\n{{$json.project_description}}\n\nBudget: ${{$json.budget}}\nDeadline: {{$json.deadline}}\n\nReturn ONLY a valid JSON object with this exact structure:\n\n{\n  \"lead_score\": number,\n  \"priority\": \"High|Medium|Low\",\n  \"decision\": \"Qualified|Manual Review|Rejected\",\n  \"estimated_hours\": number,\n  \"recommended_budget\": number,\n  \"complexity\": \"Low|Medium|High\",\n  \"risk\": \"Low|Medium|High\",\n  \"required_skills\": [\"skill1\",\"skill2\"],\n  \"summary\": \"short summary\",\n  \"reasoning\": \"reason\",\n  \"next_action\": \"next step\"\n}\n\nDo not include markdown.\nDo not wrap in ```json.\nReturn only the JSON object.",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=You are a Senior Business Development Manager at an AI Automation Agency.\n\nYour responsibility is to evaluate freelance project inquiries received from potential clients.\n\nEvaluate each inquiry using the following criteria:\n\n1. Budget adequacy\n2. Timeline feasibility\n3. Project complexity\n4. Client seriousness\n5. Long-term business value\n6. Technical feasibility\n7. Revenue opportunity\n8. Overall project quality\n\nReturn ONLY valid JSON.\n\nSchema:\n\n{\n  \"lead_score\": 0,\n  \"priority\": \"High\",\n  \"decision\": \"Qualified\",\n  \"estimated_hours\": 0,\n  \"recommended_budget\": 0,\n  \"complexity\": \"Medium\",\n  \"risk\": \"Low\",\n  \"required_skills\": [],\n  \"summary\": \"\",\n  \"reasoning\": \"\",\n  \"next_action\": \"\"\n}\n\nRules:\n\nlead_score must be between 0 and 100.\n\nPriority:\nHigh\nMedium\nLow\n\nDecision:\nQualified\nManual Review\nRejected\n\nComplexity:\nEasy\nMedium\nHard\n\nRisk:\nLow\nMedium\nHigh\n\nReturn JSON only.\n\nDo not use Markdown.\n\nDo not explain anything."
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        1520,
+        16
+      ],
+      "id": "02f6ed6f-6e67-4e5d-a14d-ebcd52d5cb17",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "builtInTools": {},
+        "options": {
+          "maxTokens": 800,
+          "temperature": 0.2
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        1440,
+        224
+      ],
+      "id": "9dfeaca9-d5f1-460b-b182-8d6eeff85ece",
+      "name": "AI Business Development Manager",
+      "credentials": {
+        "openAiApi": {
+          "id": "O42teEPhzeiFw9s1",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Current lead from Normalize Lead Data\nconst currentLead = $('Normalize Lead Data').first().json;\n\n// All existing leads from Google Sheets\nconst existingLeads = $('Load Existing Leads').all();\n\nlet duplicate = false;\n\nfor (const lead of existingLeads) {\n\n    const row = lead.json;\n\n    if (\n        row.Client_Email?.toLowerCase() === currentLead.email?.toLowerCase() &&\n        row.Job_Title?.toLowerCase() === currentLead.project_title?.toLowerCase()\n    ) {\n        duplicate = true;\n        break;\n    }\n}\n\nreturn [\n{\n    json: {\n        ...currentLead,\n        duplicate_found: duplicate\n    }\n}\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1040,
+        0
+      ],
+      "id": "0aad0ad2-b115-421f-a1a7-a800ab3acee1",
+      "name": "Check Duplicate Lead"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d83793ec-563e-48bd-a675-62387b38550c",
+              "leftValue": "duplicate_found",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1248,
+        0
+      ],
+      "id": "137e15e7-c665-42b5-aa5d-86e464bcd6db",
+      "name": "Duplicate Found?"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get AI response\nlet text = $json.text || $json.output || $json.response || \"\";\n\n// Remove markdown fences if present\ntext = text.replace(/```json/g, \"\")\n           .replace(/```/g, \"\")\n           .trim();\n\ntry {\n    const ai = JSON.parse(text);\n\n    return [{\n        json: {\n            ...$('Normalize Lead Data').first().json,\n            ...ai\n        }\n    }];\n} catch (err) {\n    throw new Error(\"Invalid AI JSON:\\n\" + text);\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1872,
+        16
+      ],
+      "id": "497c97fd-580e-45f9-9c33-eb58568381c1",
+      "name": "Parse AI Response"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.decision }}",
+                    "rightValue": "Qualified",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "434788a5-3704-4348-ae57-166f54e9bd93"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Qualified"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "2300a00d-c028-462c-a7bf-715eedb6775f",
+                    "leftValue": "={{ $json.decision }}",
+                    "rightValue": "Manual Review",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Manual Review"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "53c2fc62-ae33-4fa4-83aa-d27d66022d40",
+                    "leftValue": "={{ $json.decision }}",
+                    "rightValue": "Rejected",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Rejected"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        2080,
+        0
+      ],
+      "id": "4e3815fe-0272-4a0d-8d13-b08e1c783f3c",
+      "name": "Lead Decision Engine"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw",
+          "mode": "list",
+          "cachedResultName": "FreelanceFlow AI Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2102602887,
+          "mode": "list",
+          "cachedResultName": "Audit_Log",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit#gid=2102602887"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{$now}}",
+            "Workflow": "WF-01 Lead Qualification",
+            "Action": "Duplicate Lead",
+            "Lead_ID": "={{$json.lead_id}}",
+            "Client": "={{$json.client_name}}",
+            "Status": "Skipped",
+            "Message": "Duplicate lead detected. Workflow stopped."
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Workflow",
+              "displayName": "Workflow",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Action",
+              "displayName": "Action",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Lead_ID",
+              "displayName": "Lead_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Client",
+              "displayName": "Client",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1440,
+        -176
+      ],
+      "id": "393a551b-ea31-4f20-a491-6016ccb8053b",
+      "name": "Log Duplicate Lead",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "u0mlelQ7KVoh0pJf",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw",
+          "mode": "list",
+          "cachedResultName": "FreelanceFlow AI Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Lead_ID": "={{$json.lead_id}}",
+            "Created_At": "={{$json.created_at}}",
+            "Client_Name": "={{$json.client_name}}",
+            "Company": "={{$json.company}}",
+            "Client_Email": "={{$json.email}}",
+            "Phone": "={{$json.phone}}",
+            "Country": "={{ $json.country }}",
+            "Project_Title": "={{ $json.project_title }}",
+            "Project_Description": "={{ $json.project_description }}",
+            "Category": "={{ $json.project_category }}",
+            "Budget": "={{ $json.budget }}",
+            "Deadline": "={{ $json.deadline }}",
+            "AI_Score": "={{ $json.ai_score }}",
+            "Priority": "={{ $json.priority }}",
+            "Decision": "={{ $json.decision }}",
+            "Estimated_Hours": "={{ $json.estimated_hours }}",
+            "Recommended_Budget": "={{ $json.recommended_budget }}",
+            "Complexity": "={{ $json.complexity }}",
+            "Risk": "={{ $json.risk }}",
+            "Skills": "={{ $json.required_skills.join(', ') }}",
+            "Summary": "={{ $json.summary }}",
+            "Reasoning": "={{ $json.reasoning }}",
+            "Proposal_Status": "Pending"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Lead_ID",
+              "displayName": "Lead_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Created_At",
+              "displayName": "Created_At",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Client_Name",
+              "displayName": "Client_Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Client_Email",
+              "displayName": "Client_Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Phone",
+              "displayName": "Phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Country",
+              "displayName": "Country",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Project_Title",
+              "displayName": "Project_Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Project_Description",
+              "displayName": "Project_Description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Category",
+              "displayName": "Category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Budget",
+              "displayName": "Budget",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Deadline",
+              "displayName": "Deadline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "AI_Score",
+              "displayName": "AI_Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Priority",
+              "displayName": "Priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Decision",
+              "displayName": "Decision",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Estimated_Hours",
+              "displayName": "Estimated_Hours",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Recommended_Budget",
+              "displayName": "Recommended_Budget",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Complexity",
+              "displayName": "Complexity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Risk",
+              "displayName": "Risk",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Skills",
+              "displayName": "Skills",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Summary",
+              "displayName": "Summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Reasoning",
+              "displayName": "Reasoning",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Proposal_Status",
+              "displayName": "Proposal_Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2352,
+        -224
+      ],
+      "id": "df857506-e91a-4cce-8dc5-64cd108d070f",
+      "name": "Save Qualified Lead",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "u0mlelQ7KVoh0pJf",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw",
+          "mode": "list",
+          "cachedResultName": "FreelanceFlow AI Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2102602887,
+          "mode": "list",
+          "cachedResultName": "Audit_Log",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit#gid=2102602887"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{$now}}",
+            "Workflow": "WF-01 Lead Qualification",
+            "Action": "Qualified Lead Saved",
+            "Lead_ID": "={{ $json.Lead_ID }}",
+            "Client": "={{ $json.Client_Name }}",
+            "Status": "Success",
+            "Message": "Lead successfully qualified and stored."
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Workflow",
+              "displayName": "Workflow",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Action",
+              "displayName": "Action",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Lead_ID",
+              "displayName": "Lead_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Client",
+              "displayName": "Client",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2560,
+        -224
+      ],
+      "id": "b2b7b77a-3aea-4e47-8a46-3adb6e7af129",
+      "name": "Write Audit Log",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "u0mlelQ7KVoh0pJf",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "ashishboudh1829@gmail.com",
+        "subject": "=🔥 New Qualified Lead - {{ $('Save Qualified Lead').item.json.Company }}",
+        "message": "=<h2>New Qualified Lead</h2>\n\n<b>Client:</b> {{ $('Save Qualified Lead').item.json.Client_Name }}<br>\n<b>Company:</b> {{ $('Save Qualified Lead').item.json.Company }}<br>\n<b>Project:</b> {{ $('Save Qualified Lead').item.json.Project_Title }}<br>\n<b>Budget:</b> ${{ $('Save Qualified Lead').item.json.Budget }}<br>\n<b>AI Score:</b> {{ $('Save Qualified Lead').item.json.AI_Score }}<br>\n<b>Priority:</b> {{ $('Save Qualified Lead').item.json.Priority }}<br>\n\n<hr>\n\n<b>AI Summary</b>\n\n<p>{{ $('Save Qualified Lead').item.json.Summary }}</p>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        2784,
+        -224
+      ],
+      "id": "fbf4d6c0-0c02-43b0-9f69-8bec06278014",
+      "name": "Notify Freelancer",
+      "webhookId": "71324edc-ea00-4c77-80fb-4b0a1eecb30b",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "fibXsVbQJ6j6GE1R",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw",
+          "mode": "list",
+          "cachedResultName": "FreelanceFlow AI Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Lead_ID": "={{$json.lead_id}}",
+            "Created_At": "={{$json.created_at}}",
+            "Client_Name": "={{$json.client_name}}",
+            "Company": "={{$json.company}}",
+            "Client_Email": "={{$json.email}}",
+            "Phone": "={{$json.phone}}",
+            "Country": "={{ $json.country }}",
+            "Project_Title": "={{ $json.project_title }}",
+            "Project_Description": "={{ $json.project_description }}",
+            "Category": "={{ $json.project_category }}",
+            "Budget": "={{ $json.budget }}",
+            "Deadline": "={{ $json.deadline }}",
+            "AI_Score": "={{ $json.ai_score }}",
+            "Priority": "={{ $json.priority }}",
+            "Decision": "Manual Review",
+            "Estimated_Hours": "={{ $json.estimated_hours }}",
+            "Recommended_Budget": "={{ $json.recommended_budget }}",
+            "Complexity": "={{ $json.complexity }}",
+            "Risk": "={{ $json.risk }}",
+            "Skills": "={{ $json.required_skills.join(', ') }}",
+            "Summary": "={{ $json.summary }}",
+            "Reasoning": "={{ $json.reasoning }}",
+            "Proposal_Status": "Pending"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Lead_ID",
+              "displayName": "Lead_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Created_At",
+              "displayName": "Created_At",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Client_Name",
+              "displayName": "Client_Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Client_Email",
+              "displayName": "Client_Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Phone",
+              "displayName": "Phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Country",
+              "displayName": "Country",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Project_Title",
+              "displayName": "Project_Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Project_Description",
+              "displayName": "Project_Description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Category",
+              "displayName": "Category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Budget",
+              "displayName": "Budget",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Deadline",
+              "displayName": "Deadline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "AI_Score",
+              "displayName": "AI_Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Priority",
+              "displayName": "Priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Decision",
+              "displayName": "Decision",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Estimated_Hours",
+              "displayName": "Estimated_Hours",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Recommended_Budget",
+              "displayName": "Recommended_Budget",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Complexity",
+              "displayName": "Complexity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Risk",
+              "displayName": "Risk",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Skills",
+              "displayName": "Skills",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Summary",
+              "displayName": "Summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Reasoning",
+              "displayName": "Reasoning",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Proposal_Status",
+              "displayName": "Proposal_Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2352,
+        16
+      ],
+      "id": "ef27d849-7b75-4b49-974b-80bda46982c5",
+      "name": "Save Manual Review Lead",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "u0mlelQ7KVoh0pJf",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw",
+          "mode": "list",
+          "cachedResultName": "FreelanceFlow AI Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2102602887,
+          "mode": "list",
+          "cachedResultName": "Audit_Log",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit#gid=2102602887"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{$now}}",
+            "Workflow": "WF-01 Lead Qualification",
+            "Action": "Manual Review Required",
+            "Lead_ID": "={{ $json.Lead_ID }}",
+            "Client": "={{ $json.Client_Name }}",
+            "Status": "Manual Review",
+            "Message": "Manual Review Required"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Workflow",
+              "displayName": "Workflow",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Action",
+              "displayName": "Action",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Lead_ID",
+              "displayName": "Lead_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Client",
+              "displayName": "Client",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2560,
+        16
+      ],
+      "id": "8dc6ef4d-296f-4501-ae28-27b20a086613",
+      "name": "Log Manual Review",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "u0mlelQ7KVoh0pJf",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "ashishboudh1829@gmail.com",
+        "subject": "=🔥 Manual Review Required - {{ $('Save Qualified Lead').item.json.Company }}",
+        "message": "=<h2>New Qualified Lead</h2>\n\n<b>Client:</b> {{ $('Save Qualified Lead').item.json.Client_Name }}<br>\n<b>Company:</b> {{ $('Save Qualified Lead').item.json.Company }}<br>\n<b>Project:</b> {{ $('Save Qualified Lead').item.json.Project_Title }}<br>\n<b>Budget:</b> ${{ $('Save Qualified Lead').item.json.Budget }}<br>\n<b>AI Score:</b> {{ $('Save Qualified Lead').item.json.AI_Score }}<br>\n<b>Priority:</b> {{ $('Save Qualified Lead').item.json.Priority }}<br>\n\n<hr>\n\n<b>AI Summary</b>\n\n<p>{{ $('Save Qualified Lead').item.json.Summary }}</p>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        2784,
+        16
+      ],
+      "id": "a646bd5d-a068-4a32-a6d0-86b1fc899550",
+      "name": "Notify Freelancer1",
+      "webhookId": "71324edc-ea00-4c77-80fb-4b0a1eecb30b",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "fibXsVbQJ6j6GE1R",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw",
+          "mode": "list",
+          "cachedResultName": "FreelanceFlow AI Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Lead_ID": "={{$json.lead_id}}",
+            "Created_At": "={{$json.created_at}}",
+            "Client_Name": "={{$json.client_name}}",
+            "Company": "={{$json.company}}",
+            "Client_Email": "={{$json.email}}",
+            "Phone": "={{$json.phone}}",
+            "Country": "={{ $json.country }}",
+            "Project_Title": "={{ $json.project_title }}",
+            "Project_Description": "={{ $json.project_description }}",
+            "Category": "={{ $json.project_category }}",
+            "Budget": "={{ $json.budget }}",
+            "Deadline": "={{ $json.deadline }}",
+            "AI_Score": "={{ $json.ai_score }}",
+            "Priority": "={{ $json.priority }}",
+            "Decision": "Rejected",
+            "Estimated_Hours": "={{ $json.estimated_hours }}",
+            "Recommended_Budget": "={{ $json.recommended_budget }}",
+            "Complexity": "={{ $json.complexity }}",
+            "Risk": "={{ $json.risk }}",
+            "Skills": "={{ $json.required_skills.join(', ') }}",
+            "Summary": "={{ $json.summary }}",
+            "Reasoning": "={{ $json.reasoning }}",
+            "Proposal_Status": "Pending"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Lead_ID",
+              "displayName": "Lead_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Created_At",
+              "displayName": "Created_At",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Client_Name",
+              "displayName": "Client_Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Client_Email",
+              "displayName": "Client_Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Phone",
+              "displayName": "Phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Country",
+              "displayName": "Country",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Project_Title",
+              "displayName": "Project_Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Project_Description",
+              "displayName": "Project_Description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Category",
+              "displayName": "Category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Budget",
+              "displayName": "Budget",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Deadline",
+              "displayName": "Deadline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "AI_Score",
+              "displayName": "AI_Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Priority",
+              "displayName": "Priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Decision",
+              "displayName": "Decision",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Estimated_Hours",
+              "displayName": "Estimated_Hours",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Recommended_Budget",
+              "displayName": "Recommended_Budget",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Complexity",
+              "displayName": "Complexity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Risk",
+              "displayName": "Risk",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Skills",
+              "displayName": "Skills",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Summary",
+              "displayName": "Summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Reasoning",
+              "displayName": "Reasoning",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Proposal_Status",
+              "displayName": "Proposal_Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2352,
+        288
+      ],
+      "id": "69f4d882-f014-4d33-baae-ea56ad7684da",
+      "name": "Save Rejected Lead",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "u0mlelQ7KVoh0pJf",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw",
+          "mode": "list",
+          "cachedResultName": "FreelanceFlow AI Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2102602887,
+          "mode": "list",
+          "cachedResultName": "Audit_Log",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit#gid=2102602887"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{$now}}",
+            "Workflow": "WF-01 Lead Qualification",
+            "Action": "Lead Rejected",
+            "Lead_ID": "={{ $json.Lead_ID }}",
+            "Client": "={{ $json.Client_Name }}",
+            "Status": "Lead Rejected",
+            "Message": "Lead Rejected"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Workflow",
+              "displayName": "Workflow",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Action",
+              "displayName": "Action",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Lead_ID",
+              "displayName": "Lead_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Client",
+              "displayName": "Client",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2560,
+        288
+      ],
+      "id": "63668bd1-5f79-4e9b-a0e1-867688eb66ba",
+      "name": "Log Rejected Lead",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "u0mlelQ7KVoh0pJf",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Normalize Lead Data": {
+      "main": [
+        [
+          {
+            "node": "Load Existing Leads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load Existing Leads": {
+      "main": [
+        [
+          {
+            "node": "Check Duplicate Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "New Client Inquiry": {
+      "main": [
+        [
+          {
+            "node": "Normalize Lead Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Business Development Manager": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Duplicate Lead": {
+      "main": [
+        [
+          {
+            "node": "Duplicate Found?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Duplicate Found?": {
+      "main": [
+        [
+          {
+            "node": "Log Duplicate Lead",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Parse AI Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse AI Response": {
+      "main": [
+        [
+          {
+            "node": "Lead Decision Engine",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lead Decision Engine": {
+      "main": [
+        [
+          {
+            "node": "Save Qualified Lead",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Save Manual Review Lead",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Save Rejected Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Qualified Lead": {
+      "main": [
+        [
+          {
+            "node": "Write Audit Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write Audit Log": {
+      "main": [
+        [
+          {
+            "node": "Notify Freelancer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notify Freelancer": {
+      "main": [
+        []
+      ]
+    },
+    "Save Manual Review Lead": {
+      "main": [
+        [
+          {
+            "node": "Log Manual Review",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Manual Review": {
+      "main": [
+        [
+          {
+            "node": "Notify Freelancer1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Rejected Lead": {
+      "main": [
+        [
+          {
+            "node": "Log Rejected Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "2eea9f9e-1688-45cf-85dd-cedcc1c1b472",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "85f10678ae749c60f4d3e472e77ca5e4892c573fb0d3adbb2b883464be53d319"
+  },
+  "nodeGroups": [],
+  "id": "2tzL484Koc3y68AD",
+  "tags": []
+}

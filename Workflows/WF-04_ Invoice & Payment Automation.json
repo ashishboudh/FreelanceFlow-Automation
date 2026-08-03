@@ -1,0 +1,1237 @@
+{
+  "name": "WF-04: Invoice & Payment Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw",
+          "mode": "list",
+          "cachedResultName": "FreelanceFlow AI Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1890765584,
+          "mode": "list",
+          "cachedResultName": "Projects",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit#gid=1890765584"
+        },
+        "event": "rowUpdate",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "dea996fe-7391-41ba-bbc9-a4207405144f",
+      "name": "Project Status Trigger",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "UxY64eGz1qOORPNR",
+          "name": "Google Sheets Trigger account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "237f1029-2c8a-4e77-9043-def4d3bfc3cf",
+              "leftValue": "={{ $json.Project_Status }}",
+              "rightValue": "Completed",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "bc849053-53c1-476e-b3ee-24d5fc184fc8",
+              "leftValue": "={{ $json.Invoice_Generated }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        208,
+        0
+      ],
+      "id": "da014a65-d672-4ef4-9f87-b4b58d2cff78",
+      "name": "Invoice Required?"
+    },
+    {
+      "parameters": {
+        "jsCode": "const invoiceId =\n\"INV-\" +\nnew Date().getFullYear() +\n\"-\" +\nMath.floor(Math.random()*100000);\n\nreturn [{\njson:{\n...$json,\nInvoice_ID:invoiceId\n}\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        624,
+        0
+      ],
+      "id": "2d28e457-6208-449a-950a-478538232202",
+      "name": "Generate Invoice ID"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Generate a professional invoice for the following completed freelance project.\n\nClient Name:\n{{$json.Client_Name}}\n\nCompany:\n{{$json.Company}}\n\nProject:\n{{$json.Project_Title}}\n\nProject Description:\n{{ $json.Description }}\n\nTotal Budget:\n₹{{$json.Budget}}\n\nEstimated Hours:\n{{$json.Estimated_Hours}}\n\nCurrent Project Status:\n{{$json.Project_Status}}\n\nReturn the invoice according to the system prompt.",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=You are a Senior Finance Officer in an AI Automation Company.\n\nGenerate a professional invoice.\n\nReturn ONLY valid JSON.\n\nSchema:\n\n{\n\"invoice_amount\":\"\",\n\"gst\":\"\",\n\"total_amount\":\"\",\n\"payment_terms\":\"\",\n\"invoice_notes\":\"\",\n\"invoice_items\":[\n{\n\"description\":\"\",\n\"quantity\":\"\",\n\"rate\":\"\",\n\"amount\":\"\"\n}\n]\n}\n\nRules:\n\nReturn JSON only.\n\nGST should be 18%.\n\nGenerate at least 3 invoice items.\n\nNo markdown."
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        832,
+        0
+      ],
+      "id": "458e1464-b10c-4227-a6b3-b9e427505238",
+      "name": "AI Invoice Generator"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw",
+          "mode": "list",
+          "cachedResultName": "FreelanceFlow AI Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1890765584,
+          "mode": "list",
+          "cachedResultName": "Projects",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit#gid=1890765584"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Lead_ID",
+              "lookupValue": "={{$json.Lead_ID}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        416,
+        0
+      ],
+      "id": "595677fc-4ade-4740-8833-1e0570ccece0",
+      "name": "Load Project Details",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "u0mlelQ7KVoh0pJf",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        768,
+        208
+      ],
+      "id": "f0f7444a-aa58-4e03-9db8-4a34070ad13a",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "O42teEPhzeiFw9s1",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "let text =\n$json.text ||\n$json.output ||\n$json.response ||\n\"\";\n\ntext = text\n.replace(/```json/g, \"\")\n.replace(/```/g, \"\")\n.trim();\n\nconst invoice = JSON.parse(text);\n\nreturn [{\n  json: {\n    ...$('Generate Invoice ID').first().json,\n    ...invoice\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1184,
+        0
+      ],
+      "id": "ac1a0abc-406d-401f-9aa5-4fef12524fb5",
+      "name": "Parse Invoice"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw",
+          "mode": "list",
+          "cachedResultName": "FreelanceFlow AI Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 167933007,
+          "mode": "list",
+          "cachedResultName": "Invoices",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit#gid=167933007"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Invoice_ID": "={{$json.Invoice_ID}}",
+            "Project_ID": "={{$json.Project_ID}}",
+            "Client_Name": "={{ $json.Client_Name }}",
+            "Client_Email": "={{ $json.Client_Email }}",
+            "Invoice_Amount": "={{ $json.invoice_amount }}",
+            "Invoice_Date": "={{$today}}",
+            "Due_Date": "={{ new Date(Date.now()+15*24*60*60*1000).toISOString().split('T')[0] }}",
+            "GST": "={{$json.gst}}",
+            "Total_Amount": "={{$json.total_amount}}",
+            "Status": "Generated",
+            "Created_At": "={{$now}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Invoice_ID",
+              "displayName": "Invoice_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Project_ID",
+              "displayName": "Project_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Client_Name",
+              "displayName": "Client_Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Client_Email",
+              "displayName": "Client_Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Invoice_Date",
+              "displayName": "Invoice_Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Due_Date",
+              "displayName": "Due_Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Invoice_Amount",
+              "displayName": "Invoice_Amount",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "GST",
+              "displayName": "GST",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Total_Amount",
+              "displayName": "Total_Amount",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Invoice_Link",
+              "displayName": "Invoice_Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Created_At",
+              "displayName": "Created_At",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1392,
+        0
+      ],
+      "id": "4ca3e2ed-1ff6-4f25-b63d-bfef3d36cd67",
+      "name": "Save Invoice",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "u0mlelQ7KVoh0pJf",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const html = `\n<!DOCTYPE html>\n<html>\n<head>\n<meta charset=\"UTF-8\">\n<style>\n\nbody{\nfont-family:Arial;\nmargin:40px;\ncolor:#333;\n}\n\n.header{\nborder-bottom:4px solid #2563eb;\npadding-bottom:20px;\nmargin-bottom:30px;\n}\n\ntable{\nwidth:100%;\nborder-collapse:collapse;\nmargin-top:20px;\n}\n\ntd,th{\nborder:1px solid #ddd;\npadding:10px;\n}\n\n.total{\nmargin-top:30px;\nfont-size:22px;\nfont-weight:bold;\ntext-align:right;\ncolor:#2563eb;\n}\n\n</style>\n</head>\n\n<body>\n\n<div class=\"header\">\n\n<h1>Orithm AI</h1>\n\n<h2>INVOICE</h2>\n\n</div>\n\n<table>\n\n<tr>\n\n<td><b>Invoice ID</b></td>\n\n<td>${$input.first().json.Invoice_ID}</td>\n\n</tr>\n\n<tr>\n\n<td><b>Client</b></td>\n\n<td>${$input.first().json.Client_Name}</td>\n\n</tr>\n\n<tr>\n\n<td><b>Company</b></td>\n\n<td>${$('Parse Invoice').first().json.Company}</td>\n\n</tr>\n\n<tr>\n\n<td><b>Project</b></td>\n\n<td>${$('Parse Invoice').first().json.Project_Title}</td>\n\n</tr>\n\n<tr>\n\n<td><b>Invoice Date</b></td>\n\n<td>${new Date().toLocaleDateString()}</td>\n\n</tr>\n\n</table>\n\n<h3>Invoice Summary</h3>\n\n<p>\nThis invoice covers the services provided for the above-mentioned project by Orithm AI. The charges listed reflect the agreed scope of work completed during the billing period. Thank you for your business and continued trust.\n</p>\n\n<h3>Payment Terms</h3>\n\n<p>\nPayment is due within 7 days from the invoice date. Please include the Invoice ID as the payment reference. Any delay in payment may result in applicable late charges as per the agreed terms. For any questions regarding this invoice, please contact the Orithm AI team.\n</p>\n\n<div class=\"total\">\n\nInvoice : ₹${$input.first().json.Invoice_Amount}<br>\n\nGST : ₹${$input.first().json.GST}<br>\n\nTotal : ₹${$input.first().json.Total_Amount}\n\n</div>\n\n</body>\n\n</html>\n`;\n\nreturn [{\njson:{\n...$json,\nhtml\n}\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1584,
+        0
+      ],
+      "id": "62ef17dc-b676-4795-b49f-08db4dcfe71c",
+      "name": "Generate Invoice HTML"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.pdf.co/v1/pdf/convert/from/html",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{\n{\n  name: `${$json.Invoice_ID}.pdf`,\n  html: $json.html,\n  inline: true\n}\n}}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1776,
+        0
+      ],
+      "id": "24d9718e-7de8-4083-97f9-c32c5dbb62c3",
+      "name": "Generate PDF",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "VRnSo4vcXvKAplyT",
+          "name": "PDFCO"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{$json.url}}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "invoice_pdf"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1968,
+        0
+      ],
+      "id": "00cd8089-3d8a-4c33-824c-a38c8a819ead",
+      "name": "Download Invoice PDF"
+    },
+    {
+      "parameters": {
+        "inputDataFieldName": "invoice_pdf",
+        "name": "={{ $('Generate Invoice HTML').item.json.Invoice_ID }}.pdf",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "169CEhjoZLzS9u6MNUCnN8WUcPdPxs34O",
+          "mode": "list",
+          "cachedResultName": "Invoices",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/169CEhjoZLzS9u6MNUCnN8WUcPdPxs34O"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2160,
+        0
+      ],
+      "id": "1185d199-cf14-4acb-be82-0d1a6fc5f1c1",
+      "name": "Upload Invoice PDF",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "qvosdobMUQen7gRL",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "share",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "permissionsUi": {
+          "permissionsValues": {
+            "role": "reader",
+            "type": "anyone"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2352,
+        0
+      ],
+      "id": "8c163b90-b835-4744-96e6-729bf83011d0",
+      "name": "Share Invoice",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "qvosdobMUQen7gRL",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $('Upload Invoice PDF').item.json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2560,
+        0
+      ],
+      "id": "9476ab85-36a5-4423-b8dd-45e08bac316b",
+      "name": "Get Invoice Link",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "qvosdobMUQen7gRL",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Save Invoice').item.json.Client_Email }}",
+        "subject": "=Invoice {{ $('Save Invoice').item.json.Invoice_ID }} - {{ $('Parse Invoice').item.json.Project_Title }}",
+        "message": "=Hello {{ $('Parse Invoice').item.json.Client_Name }},\n\nYour project invoice has been generated.\n\nInvoice Number:\n{{ $('Save Invoice').item.json.Invoice_ID }}\n\nTotal Amount:\n₹{{ $('Save Invoice').item.json.Total_Amount }}\n\nPlease find the invoice attached.\n\nYou can also access it here:\n\n<a href=\"{{$('Upload Invoice PDF').item.json.webViewLink}}\">View Invoice</a>\n\nRegards,\n\nAshish Boudh\n\nOrithm AI",
+        "options": {
+          "attachmentsUi": {
+            "attachmentsBinary": [
+              {
+                "property": "=data"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        2752,
+        0
+      ],
+      "id": "86701c29-58fe-4531-b976-adc2e7871cc3",
+      "name": "Send Invoice",
+      "webhookId": "50a2f084-a444-40f2-a4de-0e85893f4130",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "fibXsVbQJ6j6GE1R",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw",
+          "mode": "list",
+          "cachedResultName": "FreelanceFlow AI Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1039031274,
+          "mode": "list",
+          "cachedResultName": "Payments",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit#gid=1039031274"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Payment_ID": "={{\"PAY-\"+Date.now()}}",
+            "Invoice_ID": "={{ $('Save Invoice').item.json.Invoice_ID }}",
+            "Project_ID": "={{ $('Save Invoice').item.json.Project_ID }}",
+            "Amount": "={{ $('Save Invoice').item.json.Total_Amount }}",
+            "Payment_Status": "=Pending",
+            "Due_Date": "={{ $('Save Invoice').item.json.Invoice_Date }}",
+            "Reminder_Count": "0",
+            "Payment_Link": "={{$('Upload Invoice PDF').item.json.webViewLink}}",
+            "Created_At": "={{$now}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Payment_ID",
+              "displayName": "Payment_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Invoice_ID",
+              "displayName": "Invoice_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Project_ID",
+              "displayName": "Project_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Amount",
+              "displayName": "Amount",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Payment_Status",
+              "displayName": "Payment_Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Due_Date",
+              "displayName": "Due_Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Paid_Date",
+              "displayName": "Paid_Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Reminder_Count",
+              "displayName": "Reminder_Count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Payment_Link",
+              "displayName": "Payment_Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Created_At",
+              "displayName": "Created_At",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2960,
+        0
+      ],
+      "id": "299b479c-e42e-4a14-aba5-ca74f8e28a6b",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "u0mlelQ7KVoh0pJf",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw",
+          "mode": "list",
+          "cachedResultName": "FreelanceFlow AI Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1890765584,
+          "mode": "list",
+          "cachedResultName": "Projects",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit#gid=1890765584"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Project_ID": "={{ $json.Project_ID }}",
+            "Invoice_Generated": "Yes",
+            "Invoice_ID": "={{ $json.Invoice_ID }}"
+          },
+          "matchingColumns": [
+            "Project_ID"
+          ],
+          "schema": [
+            {
+              "id": "Project_ID",
+              "displayName": "Project_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Proposal_ID",
+              "displayName": "Proposal_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Lead_ID",
+              "displayName": "Lead_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Client_Name",
+              "displayName": "Client_Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Client_Email",
+              "displayName": "Client_Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Project_Title",
+              "displayName": "Project_Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Description",
+              "displayName": "Description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Budget",
+              "displayName": "Budget",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Estimated_Hours",
+              "displayName": "Estimated_Hours",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Start_Date",
+              "displayName": "Start_Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "End_Date",
+              "displayName": "End_Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Project_Status",
+              "displayName": "Project_Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Invoice_Generated",
+              "displayName": "Invoice_Generated",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Invoice_ID",
+              "displayName": "Invoice_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Progress",
+              "displayName": "Progress",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Current_Milestone",
+              "displayName": "Current_Milestone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Created_At",
+              "displayName": "Created_At",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3168,
+        0
+      ],
+      "id": "cd13717a-9a90-4bfe-8d52-b4d30a04c4f9",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "u0mlelQ7KVoh0pJf",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw",
+          "mode": "list",
+          "cachedResultName": "FreelanceFlow AI Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2102602887,
+          "mode": "list",
+          "cachedResultName": "Audit_Log",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit#gid=2102602887"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{$now}}",
+            "Workflow": "WF-04",
+            "Action": "Invoice Generated",
+            "Lead_ID": "={{ $('Parse Invoice').item.json.Lead_ID }}",
+            "Client": "={{ $('Parse Invoice').item.json.Client_Name }}",
+            "Status": "Success",
+            "Message": "Invoice PDF generated, emailed and payment record created."
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Workflow",
+              "displayName": "Workflow",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Action",
+              "displayName": "Action",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Lead_ID",
+              "displayName": "Lead_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Client",
+              "displayName": "Client",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3360,
+        0
+      ],
+      "id": "a2ac4bd2-ee6a-4da7-a631-bd4a53aca50b",
+      "name": "Audit_Log",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "u0mlelQ7KVoh0pJf",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Project Status Trigger": {
+      "main": [
+        [
+          {
+            "node": "Invoice Required?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Invoice Required?": {
+      "main": [
+        [
+          {
+            "node": "Load Project Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Invoice ID": {
+      "main": [
+        [
+          {
+            "node": "AI Invoice Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load Project Details": {
+      "main": [
+        [
+          {
+            "node": "Generate Invoice ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Invoice Generator",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Invoice Generator": {
+      "main": [
+        [
+          {
+            "node": "Parse Invoice",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Invoice": {
+      "main": [
+        [
+          {
+            "node": "Save Invoice",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Invoice": {
+      "main": [
+        [
+          {
+            "node": "Generate Invoice HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Invoice HTML": {
+      "main": [
+        [
+          {
+            "node": "Generate PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate PDF": {
+      "main": [
+        [
+          {
+            "node": "Download Invoice PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Invoice PDF": {
+      "main": [
+        [
+          {
+            "node": "Upload Invoice PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Invoice PDF": {
+      "main": [
+        [
+          {
+            "node": "Share Invoice",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Share Invoice": {
+      "main": [
+        [
+          {
+            "node": "Get Invoice Link",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Invoice Link": {
+      "main": [
+        [
+          {
+            "node": "Send Invoice",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Invoice": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Audit_Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "6d188393-0c38-43d5-8bc7-cb942debb820",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "85f10678ae749c60f4d3e472e77ca5e4892c573fb0d3adbb2b883464be53d319"
+  },
+  "nodeGroups": [],
+  "id": "SZamiygpuqUKAdwD",
+  "tags": []
+}

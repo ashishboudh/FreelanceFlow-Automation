@@ -1,0 +1,782 @@
+{
+  "name": "WF-06: AI Business Analytics & CEO Dashboard",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtDay": [
+                1
+              ],
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "3de5537f-370f-40aa-bfc2-8d80ecc95065",
+      "name": "Weekly Business Report"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw",
+          "mode": "list",
+          "cachedResultName": "FreelanceFlow AI Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        208,
+        0
+      ],
+      "id": "8caf87b3-864b-40ef-93c5-90e16331b803",
+      "name": "Load Leads",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "u0mlelQ7KVoh0pJf",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw",
+          "mode": "list",
+          "cachedResultName": "FreelanceFlow AI Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 264131724,
+          "mode": "list",
+          "cachedResultName": "Proposals",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit#gid=264131724"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        384,
+        0
+      ],
+      "id": "91c14511-6788-49f2-bae4-866878c2c600",
+      "name": "Load Proposals",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "u0mlelQ7KVoh0pJf",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw",
+          "mode": "list",
+          "cachedResultName": "FreelanceFlow AI Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1890765584,
+          "mode": "list",
+          "cachedResultName": "Projects",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit#gid=1890765584"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        560,
+        0
+      ],
+      "id": "c4dab7ad-7f72-4246-a903-313e54039c7a",
+      "name": "Load Projects",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "u0mlelQ7KVoh0pJf",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw",
+          "mode": "list",
+          "cachedResultName": "FreelanceFlow AI Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 167933007,
+          "mode": "list",
+          "cachedResultName": "Invoices",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit#gid=167933007"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        752,
+        0
+      ],
+      "id": "a8393fb7-17a3-4290-918c-1288edf8d266",
+      "name": "Load Invoices",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "u0mlelQ7KVoh0pJf",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw",
+          "mode": "list",
+          "cachedResultName": "FreelanceFlow AI Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1039031274,
+          "mode": "list",
+          "cachedResultName": "Payments",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit#gid=1039031274"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        928,
+        0
+      ],
+      "id": "6c1cec12-214e-4711-a581-1a5287d4ec7a",
+      "name": "Load Payments",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "u0mlelQ7KVoh0pJf",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw",
+          "mode": "list",
+          "cachedResultName": "FreelanceFlow AI Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1820345362,
+          "mode": "list",
+          "cachedResultName": "Testimonials",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit#gid=1820345362"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1120,
+        0
+      ],
+      "id": "7dd8afd4-26a9-4d7c-8d19-81d113b804f3",
+      "name": "Load Testimonials",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "u0mlelQ7KVoh0pJf",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1296,
+        16
+      ],
+      "id": "8eea4a4c-8365-4959-a14d-78cd843cf95b",
+      "name": "Merge Business Data"
+    },
+    {
+      "parameters": {
+        "jsCode": "const leads = $('Load Leads').all().length;\nconst proposals = $('Load Proposals').all();\nconst projects = $('Load Projects').all();\nconst invoices = $('Load Invoices').all();\nconst payments = $('Load Payments').all();\nconst testimonials = $('Load Testimonials').all();\n\nconst qualified = $('Load Leads').all()\n.filter(i => i.json.Decision === \"Qualified\").length;\n\nconst completedProjects = projects.filter(i => i.json.Project_Status === \"Completed\").length;\n\nconst activeProjects = projects.filter(i => i.json.Project_Status !== \"Completed\").length;\n\nconst revenue = payments\n.filter(i => i.json.Payment_Status === \"Paid\")\n.reduce((sum,i)=>sum+Number(i.json.Amount||0),0);\n\nconst pending = payments\n.filter(i=>i.json.Payment_Status===\"Pending\")\n.reduce((sum,i)=>sum+Number(i.json.Amount||0),0);\n\nconst ratings = testimonials.map(i=>Number(i.json.Rating||0));\n\nconst avgRating = ratings.length\n? ratings.reduce((a,b)=>a+b,0)/ratings.length\n:0;\n\nreturn [{\njson:{\nTotal_Leads:leads,\nQualified_Leads:qualified,\nProposal_Count:proposals.length,\nActive_Projects:activeProjects,\nCompleted_Projects:completedProjects,\nRevenue:revenue,\nPending_Payments:pending,\nAvg_Rating:avgRating.toFixed(1)\n}\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1472,
+        16
+      ],
+      "id": "7fc2ec11-629b-46c0-933a-d4a4250d16a0",
+      "name": "Calculate KPIs"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Business Metrics\n\nTotal Leads:\n{{$json.Total_Leads}}\n\nQualified Leads:\n{{$json.Qualified_Leads}}\n\nProposals:\n{{$json.Proposal_Count}}\n\nActive Projects:\n{{$json.Active_Projects}}\n\nCompleted Projects:\n{{$json.Completed_Projects}}\n\nRevenue:\n₹{{$json.Revenue}}\n\nPending Payments:\n₹{{$json.Pending_Payments}}\n\nAverage Rating:\n{{$json.Avg_Rating}}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=You are the CEO Business Analyst of an AI Automation Company.\n\nAnalyze the weekly business metrics.\n\nReturn ONLY valid JSON.\n\nSchema:\n\n{\n\"summary\":\"\",\n\"growth\":\"\",\n\"recommendations\":[\n\"\",\n\"\",\n\"\"\n],\n\"priority_focus\":\"\",\n\"overall_health\":\"\"\n}\n\nRules:\n\nProfessional.\n\nExecutive level.\n\nNo markdown.\n\nReturn JSON only."
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        1680,
+        16
+      ],
+      "id": "4e5c1132-7dbd-4776-b8c7-6c0f8f184b8c",
+      "name": "AI Business Analyst"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        1616,
+        256
+      ],
+      "id": "156053fa-f742-44ff-ae19-48d6ee8056c1",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "O42teEPhzeiFw9s1",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "let text =\n$json.text ||\n$json.output ||\n$json.response ||\n$json.content ||\n\"\";\n\ntext = text\n.replace(/```json/g, \"\")\n.replace(/```/g, \"\")\n.trim();\n\nconst ai = JSON.parse(text);\n\nreturn [{\n  json: {\n    ...$('Calculate KPIs').first().json,\n    ...ai\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2016,
+        16
+      ],
+      "id": "be87f672-be69-4ae0-abe5-ed04826617c3",
+      "name": "Parse Business Report"
+    },
+    {
+      "parameters": {
+        "sendTo": "ashishboudh1829@gmail.com",
+        "subject": "=Weekly Business Report - {{$today}}",
+        "message": "=<h2>FreelanceFlow AI Weekly Report</h2>\n\n<b>Total Leads:</b> {{$('Calculate KPIs').item.json.Total_Leads}}<br>\n\n<b>Qualified Leads:</b> {{$('Calculate KPIs').item.json.Qualified_Leads}}<br>\n\n<b>Revenue:</b> ₹{{$('Calculate KPIs').item.json.Revenue}}<br>\n\n<b>Pending Payments:</b> ₹{{$('Calculate KPIs').item.json.Pending_Payments}}<br>\n\n<b>Average Rating:</b> {{$('Calculate KPIs').item.json.Avg_Rating}} ⭐\n\n<hr>\n\n<h3>AI Executive Summary</h3>\n\n{{ $('AI Business Analyst').item.json.text }}\n\n<hr>\n\n<h3>Recommendations</h3>\n\n<ul>\n<li>{{$json.recommendations[0]}}</li>\n<li>{{$json.recommendations[1]}}</li>\n<li>{{$json.recommendations[2]}}</li>\n</ul>\n\n<h3>Priority Focus</h3>\n\n{{$json.priority_focus}}\n\n<h3>Overall Business Health</h3>\n\n{{$json.overall_health}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        2224,
+        16
+      ],
+      "id": "39541dc3-b031-4d13-89d7-61d3a1bdcc5c",
+      "name": "Send Weekly CEO Report",
+      "webhookId": "0921c648-7791-4027-be65-2413ec7f43d3",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "fibXsVbQJ6j6GE1R",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw",
+          "mode": "list",
+          "cachedResultName": "FreelanceFlow AI Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1632076129,
+          "mode": "list",
+          "cachedResultName": "Analytics_History",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit#gid=1632076129"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Report_ID": "={{\"RPT-\"+Date.now()}}",
+            "Report_Date": "={{$today}}",
+            "AI_Summary": "={{ $('Parse Business Report').item.json.summary }}",
+            "Created_At": "={{$now}}",
+            "Avg_Rating": "={{ $('Parse Business Report').item.json.Avg_Rating }}",
+            "Pending_Payments": "={{ $('Parse Business Report').item.json.Pending_Payments }}",
+            "Revenue": "={{ $('Parse Business Report').item.json.Revenue }}",
+            "Completed_Projects": "={{ $('Parse Business Report').item.json.Completed_Projects }}",
+            "Active_Projects": "={{ $('Parse Business Report').item.json.Active_Projects }}",
+            "Proposal_Count": "={{ $('Parse Business Report').item.json.Proposal_Count }}",
+            "Qualified_Leads": "={{ $('Parse Business Report').item.json.Qualified_Leads }}",
+            "Total_Leads": "={{ $('Parse Business Report').item.json.Total_Leads }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Report_ID",
+              "displayName": "Report_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Report_Date",
+              "displayName": "Report_Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Total_Leads",
+              "displayName": "Total_Leads",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Qualified_Leads",
+              "displayName": "Qualified_Leads",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Proposal_Count",
+              "displayName": "Proposal_Count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Active_Projects",
+              "displayName": "Active_Projects",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Completed_Projects",
+              "displayName": "Completed_Projects",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Revenue",
+              "displayName": "Revenue",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Pending_Payments",
+              "displayName": "Pending_Payments",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Avg_Rating",
+              "displayName": "Avg_Rating",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "AI_Summary",
+              "displayName": "AI_Summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Created_At",
+              "displayName": "Created_At",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2432,
+        16
+      ],
+      "id": "70e335db-1c5d-40d2-801e-d7b95f6cb2f7",
+      "name": "Save Analytics History",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "u0mlelQ7KVoh0pJf",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw",
+          "mode": "list",
+          "cachedResultName": "FreelanceFlow AI Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2102602887,
+          "mode": "list",
+          "cachedResultName": "Audit_Log",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit#gid=2102602887"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{$now}}",
+            "Workflow": "WF-06",
+            "Action": "Weekly Analytics Generated",
+            "Lead_ID": "=",
+            "Client": "=Weekly KPI report generated and emailed successfully.",
+            "Status": "Success",
+            "Message": "Invoice PDF generated, emailed and payment record created."
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Workflow",
+              "displayName": "Workflow",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Action",
+              "displayName": "Action",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Lead_ID",
+              "displayName": "Lead_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Client",
+              "displayName": "Client",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2624,
+        16
+      ],
+      "id": "b310a75d-d0bc-4ac1-bed7-0ba30defaee2",
+      "name": "Audit_Log",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "u0mlelQ7KVoh0pJf",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Weekly Business Report": {
+      "main": [
+        [
+          {
+            "node": "Load Leads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load Leads": {
+      "main": [
+        [
+          {
+            "node": "Load Proposals",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load Proposals": {
+      "main": [
+        [
+          {
+            "node": "Load Projects",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load Projects": {
+      "main": [
+        [
+          {
+            "node": "Load Invoices",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load Invoices": {
+      "main": [
+        [
+          {
+            "node": "Load Payments",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load Payments": {
+      "main": [
+        [
+          {
+            "node": "Load Testimonials",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load Testimonials": {
+      "main": [
+        [
+          {
+            "node": "Merge Business Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Business Data": {
+      "main": [
+        [
+          {
+            "node": "Calculate KPIs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate KPIs": {
+      "main": [
+        [
+          {
+            "node": "AI Business Analyst",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Business Analyst",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Business Analyst": {
+      "main": [
+        [
+          {
+            "node": "Parse Business Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Business Report": {
+      "main": [
+        [
+          {
+            "node": "Send Weekly CEO Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Weekly CEO Report": {
+      "main": [
+        [
+          {
+            "node": "Save Analytics History",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Analytics History": {
+      "main": [
+        [
+          {
+            "node": "Audit_Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "11335f6e-bead-4f5b-aec3-ed972af38628",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "85f10678ae749c60f4d3e472e77ca5e4892c573fb0d3adbb2b883464be53d319"
+  },
+  "nodeGroups": [],
+  "id": "HhHBgv2BTNXodyyd",
+  "tags": []
+}

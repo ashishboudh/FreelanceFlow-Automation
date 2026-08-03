@@ -1,0 +1,373 @@
+{
+  "name": "WF-05 — Client Feedback, Testimonials & Portfolio Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw",
+          "mode": "list",
+          "cachedResultName": "FreelanceFlow AI Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1039031274,
+          "mode": "list",
+          "cachedResultName": "Payments",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit#gid=1039031274"
+        },
+        "event": "rowUpdate",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "1b1c3671-85ba-4318-90ab-1725186fcf63",
+      "name": "Payment Completed Trigger",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "UxY64eGz1qOORPNR",
+          "name": "Google Sheets Trigger account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a533a4e5-78e5-4ead-8492-3ddad8dff5dc",
+              "leftValue": "={{ $json.Payment_Status }}",
+              "rightValue": "Paid",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "f0e6ce02-6752-44de-a00c-b593be7d6f9e",
+              "leftValue": "={{ $json.Feedback_Sent }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        208,
+        0
+      ],
+      "id": "6d077c13-ed06-4819-90e2-20bc07d8b788",
+      "name": "Payment Completed?"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw",
+          "mode": "list",
+          "cachedResultName": "FreelanceFlow AI Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1890765584,
+          "mode": "list",
+          "cachedResultName": "Projects",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit#gid=1890765584"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Project_ID",
+              "lookupValue": "={{$json.Project_ID}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        416,
+        0
+      ],
+      "id": "fbb385cf-4e9a-44fa-9c33-7ceec8cb075e",
+      "name": "Load Project Details",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "u0mlelQ7KVoh0pJf",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{$json.Client_Email}}",
+        "subject": "=We'd Love Your Feedback – {{$json.Project_Title}}",
+        "message": "=Hello {{$json.Client_Name}},<br><br>\n\nThank you for working with <b>Orithm AI</b>.\n\nYour project has been completed successfully.\n\nWe would greatly appreciate your feedback.\n\nPlease fill out this short feedback form:\n\n<b>\nhttps://forms.gle/uyeM226UNmL8BgH39\n</b>\n\nYour feedback helps us improve and serve future clients better.\n\nThank you!\n\nRegards,<br>\nAshish Boudh<br>\nFounder, Orithm AI",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        624,
+        0
+      ],
+      "id": "d5e5579d-66ba-4690-845e-27df92986e96",
+      "name": "Send Feedback Request",
+      "webhookId": "1158c934-dd79-4ac4-b3e0-439cdb323194",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "fibXsVbQJ6j6GE1R",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw",
+          "mode": "list",
+          "cachedResultName": "FreelanceFlow AI Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1039031274,
+          "mode": "list",
+          "cachedResultName": "Payments",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14-XQezjDhP9sFMQnQLZE3Ykyb8Zkgc466TvjSzEumyw/edit#gid=1039031274"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Project_ID": "={{ $('Load Project Details').item.json.Project_ID }}",
+            "Feedback_Sent": "Yes"
+          },
+          "matchingColumns": [
+            "Project_ID"
+          ],
+          "schema": [
+            {
+              "id": "Payment_ID",
+              "displayName": "Payment_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Invoice_ID",
+              "displayName": "Invoice_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Project_ID",
+              "displayName": "Project_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Amount",
+              "displayName": "Amount",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Payment_Status",
+              "displayName": "Payment_Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Due_Date",
+              "displayName": "Due_Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Paid_Date",
+              "displayName": "Paid_Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Reminder_Count",
+              "displayName": "Reminder_Count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Payment_Link",
+              "displayName": "Payment_Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Created_At",
+              "displayName": "Created_At",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Feedback_Sent",
+              "displayName": "Feedback_Sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        832,
+        0
+      ],
+      "id": "412b021f-d099-4ecd-ad83-11d11231905d",
+      "name": "Mark Feedback Sent",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "u0mlelQ7KVoh0pJf",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Payment Completed Trigger": {
+      "main": [
+        [
+          {
+            "node": "Payment Completed?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Payment Completed?": {
+      "main": [
+        [
+          {
+            "node": "Load Project Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load Project Details": {
+      "main": [
+        [
+          {
+            "node": "Send Feedback Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Feedback Request": {
+      "main": [
+        [
+          {
+            "node": "Mark Feedback Sent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "476bb905-5042-4eda-a21b-dc9fd056f2be",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "85f10678ae749c60f4d3e472e77ca5e4892c573fb0d3adbb2b883464be53d319"
+  },
+  "nodeGroups": [],
+  "id": "UFJBDK19IztkyljP",
+  "tags": []
+}
